@@ -59,6 +59,8 @@ components:
           - values/upstream-cluster.yml
   - name: operator-seed-chart
     required: false
+    only:
+      flavor: upstream
     import:
       path: ./operator
       name: operator-chart
@@ -68,6 +70,8 @@ components:
           - values/upstream-operator-seed.yml
   - name: cluster-seed-chart
     required: false
+    only:
+      flavor: upstream
     import:
       path: ./cluster
       name: cluster-chart
