@@ -11,5 +11,7 @@ csi:
     repository: registry.k8s.io/sig-storage/csi-attacher
   resizer:
     repository: registry.k8s.io/sig-storage/csi-resizer
+  csiAddons:
+    repository: quay.io/csiaddons/k8s-sidecar
 image:
   repository: ghcr.io/rook/ceph
