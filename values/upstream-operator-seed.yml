@@ -11,5 +11,7 @@ csi:
     repository: "###ZARF_REGISTRY###/sig-storage/csi-attacher"
   resizer:
     repository: "###ZARF_REGISTRY###/sig-storage/csi-resizer"
+  csiAddons:
+    repository: "###ZARF_REGISTRY###/csiaddons/k8s-sidecar"
 image:
   repository: "###ZARF_REGISTRY###/rook/ceph"

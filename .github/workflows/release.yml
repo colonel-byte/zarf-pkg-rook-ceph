@@ -23,6 +23,7 @@ jobs:
       matrix:
         flavor:
           - upstream
+          - registry1
         types:
           - amd64
           - arm64
@@ -48,6 +49,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        with:
+          registry: registry1.dso.mil
+          username: ${{ secrets.REG_ONE_USER }}
+          password: ${{ secrets.REG_ONE_TOKEN }}
 
       - name: Package Zarf package
         run: |-
