@@ -14,3 +14,17 @@ components:
         version: v1.17.6
         valuesFiles:
           - ../values/base-operator.yml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: namespace
+                name: rook-ceph
+                condition: "'{.status.phase}'=Active"
+            maxTotalSeconds: 120
+            description: Wait for the creation of `rook-ceph` namespace
+          # This action is a workaround to https://github.com/rook/rook/issues/12786
+          - cmd: |
+              ./zarf tools kubectl patch serviceaccount default -n rook-ceph -p '{"imagePullSecrets": [{"name": "private-registry"}]}'
+            description: "Add pull secrets for rook/ceph cluster"
