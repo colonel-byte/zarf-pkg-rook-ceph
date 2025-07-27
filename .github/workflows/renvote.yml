@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - release/*
 permissions:
   contents: write
   id-token: write # needed for keyless signing
