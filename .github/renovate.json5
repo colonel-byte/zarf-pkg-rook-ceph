@@ -43,7 +43,7 @@
       matchStrings: [
         "(?m:renovate: datasource=(?<datasource>.+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n\\s+(version: |tag: |-.+:)(?<currentValue>(.+))$)"
       ],
-      versioningTemplate: "{{#if datasource}}{{{datasource}}}{{else}}semver{{/if}}",
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
     {
       customType: "regex",
@@ -70,13 +70,13 @@
       ],
       datasourceTemplate: "git-tags",
       depNameTemplate: "https://github.com/rook/rook.git",
-      extractVersionTemplate: "^v(?<version>1\\.16\\.\\d+)$",
+      extractVersionTemplate: "^v(?<version>\\d+\\.\\d+\\.\\d+)$",
       versioningTemplate: "semver"
     },
   ],
   customDatasources: {
     ceph: {
-      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.16.7/deploy/charts/rook-ceph-cluster/values.yaml",
+      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.6/deploy/charts/rook-ceph-cluster/values.yaml",
       format: "yaml",
       transformTemplates: [
         "($pkg := cephClusterSpec.cephVersion.image; $vrs := $replace($pkg, /^q.+:/, ''); {\"releases\": [{\"version\": $vrs, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]})"
