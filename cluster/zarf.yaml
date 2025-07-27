@@ -10,7 +10,7 @@ components:
         namespace: rook-ceph
         releaseName: rook-ceph-cluster
         url: oci://ghcr.io/rook/rook-ceph-cluster
-        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster versioning=regex:^v1\.16\..+$
+        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster versioning=regex:^v(?<major>1)\.(?<minor>16)\.(?<patch>\d+)$
         version: v1.16.7
         valuesFiles:
           - ../values/base-cluster.yml
