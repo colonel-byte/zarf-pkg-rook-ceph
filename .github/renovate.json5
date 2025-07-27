@@ -68,7 +68,7 @@
         "/(^|/)\\.github/renovate.json(5)?$/"
       ],
       matchStrings: [
-        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.+?(?<currentValue>(?:[0-9]+\\.?){3}))"
+        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.+?(?<currentValue>v?(?:[0-9]+\\.?){3}))"
       ],
       datasourceTemplate: "git-tags",
       depNameTemplate: "https://github.com/rook/rook.git",
