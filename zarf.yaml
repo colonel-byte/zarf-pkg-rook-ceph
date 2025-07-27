@@ -10,31 +10,31 @@ metadata:
     org.opencontainers.image.description: Zarf package for deploying rook-ceph
 x-charts:
   cluster:
-    - ghcr.io/rook/rook-ceph-cluster:v1.17.6
+    - ghcr.io/rook/rook-ceph-cluster:v1.16.7
   operator:
-    - ghcr.io/rook/rook-ceph:v1.17.6
+    - ghcr.io/rook/rook-ceph:v1.16.7
 components:
-# upstream components
+  # upstream components
   - name: operator-images
     required: false
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.17.6
-      - ghcr.io/rook/rook-ceph:v1.17.6
-      - quay.io/cephcsi/cephcsi:v3.14.1
-      - quay.io/csiaddons/k8s-sidecar:v0.12.0
-      - registry.k8s.io/sig-storage/csi-attacher:v4.8.1
+      - ghcr.io/rook/ceph:v1.16.7
+      - ghcr.io/rook/rook-ceph:v1.16.7
+      - quay.io/cephcsi/cephcsi:v3.13.1
+      - quay.io/csiaddons/k8s-sidecar:v0.11.0
+      - registry.k8s.io/sig-storage/csi-attacher:v4.8.0
       - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0
-      - registry.k8s.io/sig-storage/csi-provisioner:v5.2.0
-      - registry.k8s.io/sig-storage/csi-resizer:v1.13.2
-      - registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1
+      - registry.k8s.io/sig-storage/csi-provisioner:v5.1.0
+      - registry.k8s.io/sig-storage/csi-resizer:v1.13.1
+      - registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0
   - name: cluster-images
     required: false
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.17.6
+      - ghcr.io/rook/rook-ceph-cluster:v1.16.7
       - quay.io/ceph/ceph:v19.2.2
   - name: operator-chart
     required: false
@@ -80,27 +80,27 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster-seed.yml
-# registry1 components
+          # registry1 components
   - name: operator-images
     required: false
     only:
       flavor: registry1
     images:
-      - ghcr.io/rook/rook-ceph:v1.17.6
-      - registry1.dso.mil/ironbank/rook/ceph:v1.17.6
-      - registry1.dso.mil/ironbank/opensource/ceph/ceph-csi:v3.14.1
+      - ghcr.io/rook/rook-ceph:v1.16.7
       - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.30.7
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-attacher:v4.8.1
+      - registry1.dso.mil/ironbank/opensource/ceph/ceph-csi:v3.13.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-attacher:v4.8.0
       - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-node-driver-registrar:v2.13.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner:v5.2.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer:v1.13.2
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter:v8.2.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner:v5.1.0
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer:v1.13.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter:v8.2.0
+      - registry1.dso.mil/ironbank/rook/ceph:v1.16.7
   - name: cluster-images
     required: false
     only:
       flavor: registry1
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.17.6
+      - ghcr.io/rook/rook-ceph-cluster:v1.16.7
       - registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.2
   - name: operator-chart
     required: false
