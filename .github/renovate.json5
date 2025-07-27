@@ -76,7 +76,7 @@
   ],
   customDatasources: {
     ceph: {
-      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.16.7/deploy/charts/rook-ceph-cluster/values.yaml",
+      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.6/deploy/charts/rook-ceph-cluster/values.yaml",
       format: "yaml",
       transformTemplates: [
         "($pkg := cephClusterSpec.cephVersion.image; $vrs := $replace($pkg, /^q.+:/, ''); {\"releases\": [{\"version\": $vrs, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]})"
