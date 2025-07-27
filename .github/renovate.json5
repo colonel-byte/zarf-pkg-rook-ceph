@@ -72,7 +72,6 @@
       ],
       datasourceTemplate: "git-tags",
       depNameTemplate: "https://github.com/rook/rook.git",
-      extractVersionTemplate: "^v(?<version>\\d+\\.\\d+\\.\\d+)$",
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
   ],
