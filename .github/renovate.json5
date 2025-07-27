@@ -16,6 +16,7 @@
       matchDatasources: [
         "regex",
         "docker",
+        "git-tags",
       ],
       addLabels: [
         "renovate/oci"
@@ -67,16 +68,17 @@
         "/(^|/)\\.github/renovate.json(5)?$/"
       ],
       matchStrings: [
-        "(?m:defaultRegistryUrlTemplate.+?(?<currentValue>(?:[0-9]+\\.?){3}))"
+        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.+?(?<currentValue>(?:[0-9]+\\.?){3}))"
       ],
       datasourceTemplate: "git-tags",
       depNameTemplate: "https://github.com/rook/rook.git",
       extractVersionTemplate: "^v(?<version>\\d+\\.\\d+\\.\\d+)$",
-      versioningTemplate: "semver"
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
   ],
   customDatasources: {
     ceph: {
+      // renovate:
       defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.6/deploy/charts/rook-ceph-cluster/values.yaml",
       format: "yaml",
       transformTemplates: [
