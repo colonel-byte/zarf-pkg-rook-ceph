@@ -11,7 +11,7 @@ components:
         releaseName: rook-ceph
         url: oci://ghcr.io/rook/rook-ceph
         # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph versioning=regex:^v(?<major>1)\.(?<minor>16)\.(?<patch>\d+)$
-        version: v1.16.7
+        version: v1.16.8
         valuesFiles:
           - ../values/base-operator.yml
     actions:
