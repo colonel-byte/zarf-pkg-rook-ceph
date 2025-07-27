@@ -14,7 +14,8 @@
   packageRules: [
     {
       matchDatasources: [
-        "regex"
+        "regex",
+        "docker",
       ],
       addLabels: [
         "renovate/oci"
