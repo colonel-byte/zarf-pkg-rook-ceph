@@ -3,7 +3,7 @@
 set -u
 set -o pipefail
 
-declare -a FLAVOR=("upstream")
+declare -a FLAVOR=("upstream" "registry1")
 declare -a COMPONENTS=("operator" "cluster")
 declare -a COMPONENTS_TYPES=("")
 
