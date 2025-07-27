@@ -34,17 +34,15 @@
       addLabels: [
         "renovate/action"
       ],
-      groupName: "all actions",
+      groupName: "all-actions",
       groupSlug: "all-actions",
       matchPackageNames: [
         "*"
-      ]
+      ],
+      automerge: true,
     }
   ],
   separateMajorMinor: false,
-  "github-actions": {
-    enabled: true
-  },
   dependencyDashboard: true,
   customManagers: [
     {
