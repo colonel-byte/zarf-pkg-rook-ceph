@@ -20,7 +20,7 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.16.7
+      - ghcr.io/rook/ceph:v1.16.8
       - ghcr.io/rook/rook-ceph:v1.16.7
       - quay.io/cephcsi/cephcsi:v3.13.1
       - quay.io/csiaddons/k8s-sidecar:v0.11.0
@@ -94,7 +94,7 @@ components:
       - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner:v5.1.0
       - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer:v1.13.1
       - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter:v8.2.0
-      - registry1.dso.mil/ironbank/rook/ceph:v1.16.7
+      - registry1.dso.mil/ironbank/rook/ceph:v1.16.8
   - name: cluster-images
     required: false
     only:
