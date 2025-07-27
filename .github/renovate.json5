@@ -26,11 +26,24 @@
       matchPackageNames: [
         "*"
       ]
+    },
+    {
+      matchDatasources: [
+        "github-actions",
+      ],
+      addLabels: [
+        "renovate/action"
+      ],
+      groupName: "all actions",
+      groupSlug: "all-actions",
+      matchPackageNames: [
+        "*"
+      ]
     }
   ],
   separateMajorMinor: false,
   "github-actions": {
-    enabled: false
+    enabled: true
   },
   dependencyDashboard: true,
   customManagers: [
