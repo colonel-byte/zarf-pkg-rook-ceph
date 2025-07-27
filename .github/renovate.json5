@@ -4,6 +4,7 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  platformAutomerge: true,
   assignees: [
     "@A1994SC"
   ],
@@ -25,7 +26,8 @@
       groupSlug: "all-docker",
       matchPackageNames: [
         "*"
-      ]
+      ],
+      automerge: true,
     },
     {
       matchManagers: ["github-actions"],
