@@ -28,9 +28,7 @@
       ]
     },
     {
-      matchDatasources: [
-        "github-actions",
-      ],
+      matchManagers: ["github-actions"],
       addLabels: [
         "renovate/action"
       ],
