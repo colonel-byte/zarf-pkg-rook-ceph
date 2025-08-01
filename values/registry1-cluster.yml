@@ -2,7 +2,7 @@
 cephClusterSpec:
   cephVersion:
     # renovate-ceph
-    image: registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.2
+    image: registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.3
 toolbox:
   # renovate-ceph
-  image: registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.2
+  image: registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.3
