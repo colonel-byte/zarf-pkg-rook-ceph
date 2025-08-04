@@ -10,8 +10,10 @@ metadata:
     org.opencontainers.image.description: Zarf package for deploying rook-ceph
 x-charts:
   cluster:
+    # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
     - ghcr.io/rook/rook-ceph-cluster:v1.17.6
   operator:
+    # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
     - ghcr.io/rook/rook-ceph:v1.17.6
 components:
   - name: operator-images
