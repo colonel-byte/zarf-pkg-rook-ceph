@@ -29,3 +29,4 @@ jobs:
           validate: true
           delete-ghost-images: true
           delete-orphaned-images: true
+          delete-untagged: true
