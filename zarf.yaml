@@ -11,10 +11,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster versioning=regex:^v(?<major>1)\.(?<minor>16)\.(?<patch>\d+)$
-    - ghcr.io/rook/rook-ceph-cluster:v1.16.7
+    - ghcr.io/rook/rook-ceph-cluster:v1.16.8
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph versioning=regex:^v(?<major>1)\.(?<minor>16)\.(?<patch>\d+)$
-    - ghcr.io/rook/rook-ceph:v1.16.7
+    - ghcr.io/rook/rook-ceph:v1.16.8
 components:
   # upstream components
   - name: operator-images
