@@ -16,10 +16,12 @@ jobs:
       packages: write
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         arch:
           - amd64
           - arm64
+          - skeleton
     outputs:
       git-tag: ${{ steps.describe.outputs.git_describe }}
     steps:
@@ -44,6 +46,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Package Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
           zarf package create --confirm . \
             --architecture ${{ matrix.arch }} \
@@ -51,8 +54,26 @@ jobs:
             --set version=${{ steps.describe.outputs.git_describe }}
 
       - name: Publish Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}/zarf
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            zarf-*.zst \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+
+      - name: Publish Zarf package, skeleton
+        if: ${{ matrix.arch == 'skeleton' }}
+        run: |-
+          sed -i 's!###ZARF_PKG_TMPL_VERSION###!${{ steps.describe.outputs.git_describe }}!g' zarf.yaml
+
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            --flavor upstream \
+            . oci://ghcr.io/${{ github.repository_owner }}/zarf
         env:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
 
@@ -65,10 +86,12 @@ jobs:
       packages: write
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         arch:
           - amd64
           - arm64
+          - skeleton
     outputs:
       git-tag: ${{ steps.describe.outputs.git_describe }}
     steps:
@@ -100,6 +123,7 @@ jobs:
           password: ${{ secrets.REG_ONE_TOKEN }}
 
       - name: Package Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
           zarf package create --confirm . \
             --architecture ${{ matrix.arch }} \
@@ -107,7 +131,25 @@ jobs:
             --set version=${{ steps.describe.outputs.git_describe }}
 
       - name: Publish Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}/zarf
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            zarf-*.zst \
+            oci://ghcr.io/${{ github.repository_owner }}/zarf
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+
+      - name: Publish Zarf package, skeleton
+        if: ${{ matrix.arch == 'skeleton' }}
+        run: |-
+          sed -i 's!###ZARF_PKG_TMPL_VERSION###!${{ steps.describe.outputs.git_describe }}!g' zarf.yaml
+
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            --flavor registry1 \
+            . oci://ghcr.io/${{ github.repository_owner }}/zarf
         env:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}

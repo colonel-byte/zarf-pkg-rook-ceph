@@ -17,19 +17,17 @@ jobs:
       packages: write
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         flavor:
           - upstream
         types:
           - amd64
           - arm64
+          - skeleton
     outputs:
       git-tag: ${{ steps.describe.outputs.git_describe }}
     steps:
-      - name: Sleep for 30 seconds to avoid race condition with arm/amd
-        if: ${{ matrix.types == 'arm64' }}
-        run: sleep 30s
-
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -58,11 +56,32 @@ jobs:
           password: ${{ secrets.REG_ONE_TOKEN }}
 
       - name: Package Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package create --confirm . --architecture ${{ matrix.types }} --flavor ${{ matrix.flavor }} --set version=${{ steps.describe.outputs.git_describe }}
+          zarf package create --confirm . \
+            --architecture ${{ matrix.types }} \
+            --flavor ${{ matrix.flavor }} \
+            --set version=${{ steps.describe.outputs.git_describe }}
 
       - name: Publish Zarf package
+        if: ${{ matrix.types != 'skeleton' }}
         run: |-
-          zarf package publish --signing-key env://COSIGN_KEY --signing-key-pass ${{ secrets.COSIGN_PASS }} zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}/zarf
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            zarf-*.zst oci://ghcr.io/${{ github.repository_owner }}/zarf
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+
+      - name: Publish Zarf package, skeleton
+        if: ${{ matrix.arch == 'skeleton' }}
+        run: |-
+          sed -i 's!###ZARF_PKG_TMPL_VERSION###!${{ steps.describe.outputs.git_describe }}!g' zarf.yaml
+
+          zarf package publish \
+            --signing-key env://COSIGN_KEY \
+            --signing-key-pass ${{ secrets.COSIGN_PASS }} \
+            --flavor ${{ matrix.flavor }} \
+            . oci://ghcr.io/${{ github.repository_owner }}/zarf
         env:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
