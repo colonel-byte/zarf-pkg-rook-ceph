@@ -75,7 +75,7 @@ jobs:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
 
       - name: Publish Zarf package, skeleton
-        if: ${{ matrix.arch == 'skeleton' }}
+        if: ${{ matrix.types == 'skeleton' }}
         run: |-
           sed -i 's!###ZARF_PKG_TMPL_VERSION###!${{ steps.describe.outputs.git_describe }}!g' zarf.yaml
 
