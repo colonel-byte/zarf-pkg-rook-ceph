@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - release/*
+  workflow_run:
+    workflows:
+      - Populate Renovate resources
 permissions:
   contents: write
   id-token: write # needed for keyless signing
@@ -26,6 +29,20 @@ jobs:
       - name: Install The Latest Release Version of Zarf
         uses: zarf-dev/setup-zarf@10e539efed02f75ec39eb8823e22a5c795f492ae # v1.0.1
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Registry1
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
+        with:
+          registry: registry1.dso.mil
+          username: ${{ secrets.REG_ONE_USER }}
+          password: ${{ secrets.REG_ONE_TOKEN }}
+
       - name: Update checksum
         env:
           GH_TOKEN: ${{ github.token }}
@@ -41,7 +58,8 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6.0.1
         with:
-          commit_author: ${{ steps.last-commit.outputs.author }}
+          commit_author: |-
+            renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
           commit_message: ${{ steps.last-commit.outputs.message }}
           commit_options: '--amend --no-edit'
           push_options: '--force'
