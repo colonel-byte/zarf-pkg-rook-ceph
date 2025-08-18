@@ -15,13 +15,13 @@ jobs:
     if: ${{ github.actor == 'renovate[bot]' }}
     steps:
       - name: Clone repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Configure gitsign
-        uses: chainguard-dev/actions/setup-gitsign@df684a72f67ce7eecd78098365cb5057f16be3b1 # v1.4.8
+        uses: chainguard-dev/actions/setup-gitsign@1df2b5598adffbfe72a3abe9243d73e338bbb006 # v1.4.10
 
       - name: Install The Latest Release Version of Zarf
         uses: zarf-dev/setup-zarf@10e539efed02f75ec39eb8823e22a5c795f492ae # v1.0.1
