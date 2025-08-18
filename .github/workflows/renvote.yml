@@ -33,11 +33,15 @@ jobs:
         run: |-
           ./.github/hack/zarf.sh
 
-      - name: Commit & Push changes
-        uses: actions-js/push@5a7cbd780d82c0c937b5977586e641b2fd94acc5 # v1.5
+      - name: Get last commit message
+        id: last-commit
+        run: |
+          echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+          echo "author=$(git log -1 --pretty=\"%an <%ae>\")" >> $GITHUB_OUTPUT
+
+      - uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6.0.1
         with:
-          branch: ${{ github.head_ref }}
-          message: "chore(resources): updated resources files"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          author_name: renovate[bot]
-          author_email: <29139614+renovate[bot]@users.noreply.github.com>
+          commit_author: ${{ steps.last-commit.outputs.author }}
+          commit_message: ${{ steps.last-commit.outputs.message }}
+          commit_options: '--amend --no-edit'
+          push_options: '--force'
