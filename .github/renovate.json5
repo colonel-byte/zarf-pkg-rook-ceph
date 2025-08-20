@@ -89,7 +89,7 @@
   customDatasources: {
     ceph: {
       // renovate: versioning=regex:^v?(?<major>1)\.(?<minor>17)\.(?<patch>\d+)$
-      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.7/deploy/charts/rook-ceph-cluster/values.yaml",
+      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.8/deploy/charts/rook-ceph-cluster/values.yaml",
       format: "yaml",
       transformTemplates: [
         "($pkg := cephClusterSpec.cephVersion.image; $vrs := $replace($pkg, /^q.+:/, ''); {\"releases\": [{\"version\": $vrs, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]})"
