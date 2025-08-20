@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Package Zarf package
-        if: ${{ matrix.types != 'skeleton' }}
+        if: ${{ matrix.arch != 'skeleton' }}
         run: |-
           zarf package create --confirm . \
             --architecture ${{ matrix.arch }} \
@@ -53,7 +53,7 @@ jobs:
             --set version=${{ steps.describe.outputs.git_describe }}
 
       - name: Publish Zarf package
-        if: ${{ matrix.types != 'skeleton' }}
+        if: ${{ matrix.arch != 'skeleton' }}
         run: |-
           zarf package publish \
             --signing-key env://COSIGN_KEY \
@@ -64,7 +64,7 @@ jobs:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
 
       - name: Publish Zarf package, skeleton
-        if: ${{ matrix.types == 'skeleton' }}
+        if: ${{ matrix.arch == 'skeleton' }}
         run: |-
           sed -i 's!###ZARF_PKG_TMPL_VERSION###!${{ steps.describe.outputs.git_describe }}!g' zarf.yaml
 
