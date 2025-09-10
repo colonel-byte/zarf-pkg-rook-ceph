@@ -11,7 +11,7 @@ components:
         releaseName: rook-ceph-cluster
         url: oci://ghcr.io/rook/rook-ceph-cluster
         # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-        version: v1.18.1
+        version: v1.18.2
         valuesFiles:
           - ../values/base-cluster.yml
     actions:
