@@ -1,0 +1,17 @@
+csi:
+  cephcsi:
+    repository: "###ZARF_REGISTRY###/cephcsi/cephcsi"
+  registrar:
+    repository: "###ZARF_REGISTRY###/sig-storage/csi-node-driver-registrar"
+  provisioner:
+    repository: "###ZARF_REGISTRY###/sig-storage/csi-provisioner"
+  snapshotter:
+    repository: "###ZARF_REGISTRY###/sig-storage/csi-snapshotter"
+  attacher:
+    repository: "###ZARF_REGISTRY###/sig-storage/csi-attacher"
+  resizer:
+    repository: "###ZARF_REGISTRY###/sig-storage/csi-resizer"
+  csiAddons:
+    repository: "###ZARF_REGISTRY###/csiaddons/k8s-sidecar"
+image:
+  repository: "###ZARF_REGISTRY###/rook/ceph"

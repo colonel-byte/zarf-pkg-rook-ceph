@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: zarf-package-rook-ceph-operator
+components:
+  - name: operator-chart
+    charts:
+      - name: rook-ceph
+        namespace: rook-ceph
+        releaseName: rook-ceph
+        url: oci://ghcr.io/rook/rook-ceph
+        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
+        version: v1.18.4
+        valuesFiles:
+          - ../values/base-operator.yml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: namespace
+                name: rook-ceph
+                condition: "'{.status.phase}'=Active"
+            maxTotalSeconds: 120
+            description: Wait for the creation of `rook-ceph` namespace
+          # This action is a workaround to https://github.com/rook/rook/issues/12786
+          - cmd: |
+              ./zarf tools kubectl patch serviceaccount default -n rook-ceph -p '{"imagePullSecrets": [{"name": "private-registry"}]}'
+            description: "Add pull secrets for rook/ceph cluster"

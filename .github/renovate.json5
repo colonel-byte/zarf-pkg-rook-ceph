@@ -1,0 +1,99 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  platformAutomerge: true,
+  assignees: [
+    "@A1994SC"
+  ],
+  baseBranchPatterns: [
+    "main",
+    "/^release\\/.*/"
+  ],
+  packageRules: [
+    {
+      matchDatasources: [
+        "regex",
+        "docker",
+        "git-tags",
+      ],
+      addLabels: [
+        "renovate/oci"
+      ],
+      groupName: "all dependencies",
+      groupSlug: "all-docker",
+      matchPackageNames: [
+        "*"
+      ],
+      automerge: true,
+    },
+    {
+      matchManagers: ["github-actions"],
+      addLabels: [
+        "renovate/action"
+      ],
+      groupName: "all-actions",
+      groupSlug: "all-actions",
+      matchPackageNames: [
+        "*"
+      ],
+      automerge: true,
+    }
+  ],
+  separateMajorMinor: false,
+  dependencyDashboard: true,
+  customManagers: [
+    {
+      customType: "regex",
+      description: [
+        "Process custom dependencies"
+      ],
+      managerFilePatterns: [
+        "/(^|/).+\\.ya?ml(\\.j2)?$/"
+      ],
+      matchStrings: [
+        "(?m:renovate: datasource=(?<datasource>.+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n\\s+(version: |tag: |-.+:)(?<currentValue>(.+))$)"
+      ],
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+    },
+    {
+      customType: "regex",
+      datasourceTemplate: "custom.ceph",
+      managerFilePatterns: [
+        "/^values/.+\\.ya?ml(\\.j2)?$/"
+      ],
+      versioningTemplate: "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+      matchStrings: [
+        "(?m:renovate-ceph\\n\\s+.+:(?<currentValue>(v[0-9\\.]+)))"
+      ],
+      depNameTemplate: "quay.io/ceph/ceph"
+    },
+    {
+      customType: "regex",
+      description: [
+        "Process custom dependencies"
+      ],
+      managerFilePatterns: [
+        "/(^|/)\\.github/renovate.json(5)?$/"
+      ],
+      matchStrings: [
+        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.+?(?<currentValue>v?(?:[0-9]+\\.?){3}))"
+      ],
+      datasourceTemplate: "git-tags",
+      depNameTemplate: "https://github.com/rook/rook.git",
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+    },
+  ],
+  customDatasources: {
+    ceph: {
+      // renovate: versioning=regex:^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$
+      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.18.4/deploy/charts/rook-ceph-cluster/values.yaml",
+      format: "yaml",
+      transformTemplates: [
+        "($pkg := cephClusterSpec.cephVersion.image; $vrs := $replace($pkg, /^q.+:/, ''); {\"releases\": [{\"version\": $vrs, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]})"
+      ]
+    }
+  }
+}
