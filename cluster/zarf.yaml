@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: zarf-package-rook-ceph-cluster
+components:
+  - name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        namespace: rook-ceph
+        releaseName: rook-ceph-cluster
+        url: oci://ghcr.io/rook/rook-ceph-cluster
+        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
+        version: v1.18.5
+        valuesFiles:
+          - ../values/base-cluster.yml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: cephcluster
+                name: rook-ceph
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph cluster to be ready
+          - wait:
+              cluster:
+                kind: cephblockpool
+                name: ceph-blockpool
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph blockpool to be ready
+          - wait:
+              cluster:
+                kind: cephfilesystem
+                name: ceph-filesystem
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph filesystem to be ready
+          - wait:
+              cluster:
+                kind: cephobjectstore
+                name: ceph-objectstore
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph objectstore to be ready
+          - cmd: |-
+              kubectl -n rook-ceph rollout status deploy csi-cephfsplugin-provisioner
+            description: Restart deployment csi-cephfsplugin-provisioner
+          - cmd: |-
+              kubectl -n rook-ceph rollout status deploy csi-cephfsplugin-provisioner
+            description: Wait for deployment csi-cephfsplugin-provisioner rollout to be done
+            mute: true
+          - cmd: |-
+              kubectl -n rook-ceph rollout status deploy csi-rbdplugin-provisioner
+            description: Restart deployment csi-rbdplugin-provisioner
+          - cmd: |-
+              kubectl -n rook-ceph rollout status deploy csi-rbdplugin-provisioner
+            description: Wait for deployment csi-rbdplugin-provisioner rollout to be done
+            mute: true
+          - wait:
+              cluster:
+                kind: deployment
+                name: csi-rbdplugin-provisioner
+                condition: available
+                namespace: rook-ceph
+            maxTotalSeconds: 1000
+            description: Waiting for CSI RDB provisioner to be available
+          - wait:
+              cluster:
+                kind: deployment
+                name: csi-cephfsplugin-provisioner
+                condition: available
+                namespace: rook-ceph
+            maxTotalSeconds: 1000
+            description: Waiting for CSI CephFS provisioner to be available
+          - cmd: |-
+              kubectl -n rook-ceph rollout restart ds csi-cephfsplugin
+            description: Restart daemonset csi-cephfsplugin
+          - cmd: |-
+              kubectl -n rook-ceph rollout status ds csi-cephfsplugin
+            description: Wait for daemonset csi-cephfsplugin rollout to be done
+            mute: true
+          - cmd: |-
+              kubectl -n rook-ceph rollout restart ds csi-rbdplugin
+            description: Restart daemonset csi-rbdplugin
+          - cmd: |-
+              kubectl -n rook-ceph rollout status ds csi-rbdplugin
+            description: Wait for daemonset csi-rbdplugin rollout to be done
+            mute: true
