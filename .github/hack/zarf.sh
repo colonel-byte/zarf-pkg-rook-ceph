@@ -10,8 +10,10 @@ declare -a COMPONENTS_TYPES=("")
 for flavor in "${FLAVOR[@]}"; do
   rm -rf .direnv/$flavor
   mkdir -p .direnv/$flavor
-  zarf dev find-images --flavor $flavor --skip-cosign . 2>/dev/null > .direnv/$flavor/out.yml
+
   echo "::debug::flavor='${flavor}'"
+  echo "::debug::discovering images"
+  zarf dev find-images --flavor $flavor --skip-cosign . 2>/dev/null > .direnv/$flavor/out.yml
   for component in "${COMPONENTS[@]}"; do
     echo "::debug::component='${component}'"
     for type in "${COMPONENTS_TYPES[@]}"; do
