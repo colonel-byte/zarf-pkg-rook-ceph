@@ -15,6 +15,9 @@ x-charts:
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
     - ghcr.io/rook/rook-ceph:v1.18.6
+variables:
+  - name: ROOK_CEPH_DATA_DIR
+    default: /var/lib/rook
 components:
   - name: operator-images
     required: false
@@ -38,28 +41,6 @@ components:
     images:
       - ghcr.io/rook/rook-ceph-cluster:v1.18.6
       - quay.io/ceph/ceph:v19.2.3
-  - name: operator-chart
-    required: false
-    only:
-      flavor: upstream
-    import:
-      path: ./operator
-      name: operator-chart
-    charts:
-      - name: rook-ceph
-        valuesFiles:
-          - values/upstream-operator.yml
-  - name: cluster-chart
-    required: false
-    only:
-      flavor: upstream
-    import:
-      path: ./cluster
-      name: cluster-chart
-    charts:
-      - name: rook-ceph-cluster
-        valuesFiles:
-          - values/upstream-cluster.yml
   - name: operator-seed-chart
     required: false
     only:
@@ -82,69 +63,25 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster-seed.yml
-  - name: operator-images
-    required: false
-    only:
-      flavor: registry1
-    images:
-      - ghcr.io/rook/rook-ceph:v1.18.6
-      - quay.io/cephcsi/ceph-csi-operator:v0.4.1
-      - registry1.dso.mil/ironbank/kiwigrid/k8s-sidecar:1.30.7
-      - registry1.dso.mil/ironbank/opensource/ceph/ceph-csi:v3.15.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-attacher:v4.8.1
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-node-driver-registrar:v2.13.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner:v5.2.0
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer:v1.13.2
-      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter:v8.2.1
-      - registry1.dso.mil/ironbank/rook/ceph:v1.18.6
-  - name: cluster-images
-    required: false
-    only:
-      flavor: registry1
-    images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.18.6
-      - registry1.dso.mil/ironbank/opensource/ceph/ceph:v19.2.3
   - name: operator-chart
     required: false
     only:
-      flavor: registry1
+      flavor: upstream
     import:
       path: ./operator
       name: operator-chart
     charts:
       - name: rook-ceph
         valuesFiles:
-          - values/registry1-operator.yml
+          - values/upstream-operator.yml
   - name: cluster-chart
     required: false
     only:
-      flavor: registry1
+      flavor: upstream
     import:
       path: ./cluster
       name: cluster-chart
     charts:
       - name: rook-ceph-cluster
         valuesFiles:
-          - values/registry1-cluster.yml
-  - name: operator-seed-chart
-    required: false
-    only:
-      flavor: registry1
-    import:
-      path: ./operator
-      name: operator-chart
-    charts:
-      - name: rook-ceph
-        valuesFiles:
-          - values/registry1-operator-seed.yml
-  - name: cluster-seed-chart
-    required: false
-    only:
-      flavor: registry1
-    import:
-      path: ./cluster
-      name: cluster-chart
-    charts:
-      - name: rook-ceph-cluster
-        valuesFiles:
-          - values/registry1-cluster-seed.yml
+          - values/upstream-cluster.yml

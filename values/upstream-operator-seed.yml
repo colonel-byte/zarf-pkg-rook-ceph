@@ -15,3 +15,8 @@ csi:
     repository: "###ZARF_REGISTRY###/csiaddons/k8s-sidecar"
 image:
   repository: "###ZARF_REGISTRY###/rook/ceph"
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: "###ZARF_REGISTRY###/cephcsi/ceph-csi-operator"

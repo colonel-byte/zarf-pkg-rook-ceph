@@ -15,3 +15,8 @@ csi:
     repository: quay.io/csiaddons/k8s-sidecar
 image:
   repository: ghcr.io/rook/ceph
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: quay.io/cephcsi/ceph-csi-operator

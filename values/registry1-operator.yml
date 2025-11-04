@@ -16,3 +16,8 @@ csi:
     tag: 1.30.7
 image:
   repository: registry1.dso.mil/ironbank/rook/ceph
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: quay.io/cephcsi/ceph-csi-operator

@@ -144,10 +144,7 @@ csi:
     - key: InfrastructureOnly
       operator: Exists
 tolerations:
-  - key: CriticalOnly
-    operator: Exists
-  - key: InfrastructureOnly
-    operator: Exists
+  - operator: "Exists"
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -160,3 +157,22 @@ discover:
     - effect: NoSchedule
       key: CriticalOnly
       operator: Exists
+imagePullSecrets:
+  - name: private-registry
+ceph-csi-operator:
+  controllerManager:
+    podSecurityContext:
+      runAsNonRoot: true
+    # will work after this is merged and rook is updated
+    # https://github.com/ceph/ceph-csi-operator/pull/353
+    tolerations:
+      - operator: "Exists"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: CriticalOnly
+                  operator: Exists
+  imagePullSecrets:
+    - name: private-registry

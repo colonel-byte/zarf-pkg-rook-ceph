@@ -1,7 +1,8 @@
 ---
 toolbox:
   enabled: true
-  tolerations: []
+  tolerations:
+    - operator: "Exists"
   affinity: {}
   resources:
     limits:
@@ -18,7 +19,7 @@ monitoring:
   createPrometheusRules: false
 pspEnable: false
 cephClusterSpec:
-  dataDirHostPath: /var/lib/rook
+  dataDirHostPath: "###ZARF_VAR_ROOK_CEPH_DATA_DIR###"
   mon:
     count: 3
     allowMultiplePerNode: false

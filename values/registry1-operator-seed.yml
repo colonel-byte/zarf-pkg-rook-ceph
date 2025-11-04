@@ -16,3 +16,8 @@ csi:
     tag: 1.30.7
 image:
   repository: "###ZARF_REGISTRY###/ironbank/rook/ceph"
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: "###ZARF_REGISTRY###/cephcsi/ceph-csi-operator"
