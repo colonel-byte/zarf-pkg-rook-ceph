@@ -1,0 +1,51 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: zarf-package-rook-ceph-cluster
+components:
+  - name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        namespace: rook-ceph
+        releaseName: rook-ceph-cluster
+        url: oci://ghcr.io/rook/rook-ceph-cluster
+        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
+        version: v1.18.7
+        valuesFiles:
+          - ../values/base-cluster.yml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: cephcluster
+                name: rook-ceph
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph cluster to be ready
+          - wait:
+              cluster:
+                kind: cephblockpool
+                name: ceph-blockpool
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph blockpool to be ready
+          - wait:
+              cluster:
+                kind: cephfilesystem
+                name: ceph-filesystem
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph filesystem to be ready
+          - wait:
+              cluster:
+                kind: cephobjectstore
+                name: ceph-objectstore
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for ceph objectstore to be ready
