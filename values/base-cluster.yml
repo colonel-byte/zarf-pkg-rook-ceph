@@ -1,0 +1,290 @@
+---
+toolbox:
+  enabled: true
+  tolerations:
+    - operator: "Exists"
+  affinity: {}
+  resources:
+    limits:
+      cpu: null
+      memory: 128Mi
+    requests:
+      cpu: null
+      memory: 32Mi
+storage:
+  useAllNodes: true
+  useAllDevices: true
+monitoring:
+  enabled: true
+  createPrometheusRules: false
+pspEnable: false
+cephClusterSpec:
+  dataDirHostPath: "###ZARF_VAR_ROOK_CEPH_DATA_DIR###"
+  mon:
+    count: 3
+    allowMultiplePerNode: false
+  mgr:
+    count: 2
+    allowMultiplePerNode: false
+    modules:
+      - name: pg_autoscaler
+        enabled: true
+  dashboard:
+    enabled: true
+    ssl: false
+  placement:
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: adrp.xyz/is-infra
+                  operator: In
+                  values:
+                    - "true"
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+    osd:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: adrp.xyz/is-infra
+                  operator: In
+                  values:
+                    - "true"
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+    mon:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: adrp.xyz/is-infra
+                  operator: In
+                  values:
+                    - "true"
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+    mgr:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: adrp.xyz/is-infra
+                  operator: In
+                  values:
+                    - "true"
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+  resources:
+    mgr:
+      limits:
+        cpu: null
+        memory: 768Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    mon:
+      limits:
+        cpu: null
+        memory: 1024Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    osd:
+      limits: null
+      # cpu: null
+      # memory: 4Gi
+      requests:
+        cpu: 10m
+        memory: 128Mi
+    prepareosd:
+      requests:
+        cpu: 50m
+        memory: 50Mi
+    mgr-sidecar:
+      limits:
+        memory: 100Mi
+      requests:
+        cpu: 10m
+        memory: 40Mi
+    crashcollector:
+      limits:
+        memory: 60Mi
+      requests:
+        cpu: 10m
+        memory: 60Mi
+    logcollector:
+      limits:
+        cpu: null
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 100Mi
+    cleanup:
+      limits:
+        cpu: null
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 100Mi
+    exporter:
+      limits:
+        cpu: null
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 50Mi
+  removeOSDsIfOutAndSafeToRemove: false
+  priorityClassNames:
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
+  storage:
+    useAllNodes: true
+    useAllDevices: true
+cephBlockPools:
+  - name: ceph-blockpool
+    spec:
+      failureDomain: host
+      replicated:
+        size: 2
+    storageClass:
+      enabled: true
+      name: ceph-block
+      isDefault: true
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
+      mountOptions: []
+      allowedTopologies: []
+      parameters:
+        imageFormat: "2"
+        imageFeatures: layering
+        csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+        csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+        csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+        csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+        csi.storage.k8s.io/fstype: ext4
+cephFileSystems:
+  - name: ceph-filesystem
+    spec:
+      metadataPool:
+        replicated:
+          size: 3
+      dataPools:
+        - failureDomain: host
+          replicated:
+            size: 2
+          name: data0
+      metadataServer:
+        activeCount: 1
+        activeStandby: true
+        resources:
+          limits:
+            cpu: null
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 32Mi
+        priorityClassName: system-cluster-critical
+        placement:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: adrp.xyz/is-infra
+                      operator: In
+                      values:
+                        - "true"
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/part-of
+                      operator: In
+                      values:
+                        - ceph-filesystem
+                topologyKey: kubernetes.io/hostname
+          tolerations:
+            - key: InfrastructureOnly
+              operator: Exists
+    storageClass:
+      enabled: true
+      isDefault: false
+      name: ceph-filesystem
+      pool: data0
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
+      parameters:
+        csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+        csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+        csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+        csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+        csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+        csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+        csi.storage.k8s.io/fstype: ext4
+cephObjectStores:
+  - name: ceph-objectstore
+    spec:
+      metadataPool:
+        failureDomain: host
+        replicated:
+          size: 3
+      dataPool:
+        failureDomain: host
+        erasureCoded:
+          dataChunks: 2
+          codingChunks: 1
+      preservePoolsOnDelete: true
+      gateway:
+        port: 80
+        resources:
+          limits:
+            cpu: null
+            memory: 384Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        instances: 2
+        priorityClassName: system-cluster-critical
+        placement:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: adrp.xyz/is-infra
+                      operator: In
+                      values:
+                        - "true"
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/part-of
+                      operator: In
+                      values:
+                        - ceph-objectstore
+                topologyKey: kubernetes.io/hostname
+          tolerations:
+            - key: InfrastructureOnly
+              operator: Exists
+    storageClass:
+      enabled: true
+      name: ceph-bucket
+      reclaimPolicy: Delete
+      volumeBindingMode: "Immediate"
+      parameters:
+        region: us-east-1

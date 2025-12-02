@@ -1,0 +1,62 @@
+---
+name: Populate Renovate resources
+on:
+  pull_request:
+    branches:
+      - main
+      - release/*
+permissions:
+  contents: write
+  id-token: write # needed for keyless signing
+jobs:
+  resources:
+    name: renovate-config
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'renovate[bot]' }}
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Configure gitsign
+        uses: chainguard-dev/actions/setup-gitsign@3e8a2a226fad9e1ecbf2d359b8a7697554a4ac6d # v1.5.10
+
+      - name: Install The Latest Release Version of Zarf
+        uses: zarf-dev/setup-zarf@10e539efed02f75ec39eb8823e22a5c795f492ae # v1.0.1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Registry1
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: registry1.dso.mil
+          username: ${{ secrets.REG_ONE_USER }}
+          password: ${{ secrets.REG_ONE_TOKEN }}
+
+      - name: Update checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+        if: ${{ !startsWith(github.ref, 'refs/heads/renovate/') }}
+        run: |-
+          ./.github/hack/zarf.sh
+
+      - name: Get last commit message
+        id: last-commit
+        run: |
+          echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+          echo "author=$(git log -1 --pretty=\"%an <%ae>\")" >> $GITHUB_OUTPUT
+
+      - uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7.0.0
+        with:
+          commit_author: |-
+            renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+          commit_message: ${{ steps.last-commit.outputs.message }}
+          commit_options: '--amend --no-edit'
+          push_options: '--force'
