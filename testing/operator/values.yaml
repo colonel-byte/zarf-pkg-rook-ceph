@@ -1,0 +1,36 @@
+replicaCount: 1
+
+crds:
+  create: false
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - "ALL"
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+  # fsGroup: 2000
+
+tolerations: []
+affinity: {}
+
+image:
+  repository: "###ZARF_REGISTRY###/cloudnative-pg/cloudnative-pg"
+  tag: 1.28.0-ubi9
+
+# Operator configuration.
+config:
+  name: cnpg-controller-manager-config
+  # https://cloudnative-pg.io/docs/1.28/operator_conf
+  data:
+    INHERITED_LABELS: |-
+      zarf.dev/*

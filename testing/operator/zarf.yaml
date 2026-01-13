@@ -1,0 +1,33 @@
+---
+kind: ZarfPackageConfig
+metadata:
+  name: operator-cloudnative-pg
+  version: 0.27.0
+components:
+  - name: manifests
+    required: true
+    manifests:
+      - name: crds
+        namespace: cnpg-system
+        files:
+          - crds/backups.postgresql.cnpg.io.yml
+          - crds/clusterimagecatalogs.postgresql.cnpg.io.yml
+          - crds/clusters.postgresql.cnpg.io.yml
+          - crds/databases.postgresql.cnpg.io.yml
+          - crds/failoverquorums.postgresql.cnpg.io.yml
+          - crds/imagecatalogs.postgresql.cnpg.io.yml
+          - crds/poolers.postgresql.cnpg.io.yml
+          - crds/publications.postgresql.cnpg.io.yml
+          - crds/scheduledbackups.postgresql.cnpg.io.yml
+          - crds/subscriptions.postgresql.cnpg.io.yml
+  - name: cnpg
+    required: true
+    charts:
+      - name: cloudnative-pg
+        version: 0.27.0
+        url: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
+        namespace: cnpg-system
+        valuesFiles:
+          - values.yaml
+    images:
+      - ghcr.io/cloudnative-pg/cloudnative-pg:1.28.0-ubi9
