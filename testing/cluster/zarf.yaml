@@ -1,0 +1,17 @@
+---
+kind: ZarfPackageConfig
+metadata:
+  name: cluster-postgres
+  allowNamespaceOverride: true
+components:
+  - name: cluster
+    required: true
+    charts:
+      - name: postgres
+        namespace: cnpg-system
+        version: 0.5.0
+        url: oci://ghcr.io/cloudnative-pg/charts/cluster
+        valuesFiles:
+          - values.yaml
+    images:
+      - ghcr.io/cloudnative-pg/postgresql:17

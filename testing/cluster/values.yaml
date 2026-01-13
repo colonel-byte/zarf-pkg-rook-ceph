@@ -1,0 +1,13 @@
+---
+version:
+  postgresql: "17"
+
+mode: standalone
+
+cluster:
+  instances: 3
+  imageName: "###ZARF_REGISTRY###/cloudnative-pg/postgresql:17"
+  additionalLabels:
+    zarf.dev/agent: ignore
+  imagePullSecrets:
+    - name: private-registry
