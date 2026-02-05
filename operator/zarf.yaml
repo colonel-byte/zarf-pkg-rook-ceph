@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: zarf-package-rook-ceph-operator
+components:
+  - name: operator-chart
+    charts:
+      - name: rook-ceph
+        namespace: rook-ceph
+        releaseName: rook-ceph
+        url: oci://ghcr.io/rook/rook-ceph
+        # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
+        version: v1.19.1
+        valuesFiles:
+          - ../values/base-operator.yml
