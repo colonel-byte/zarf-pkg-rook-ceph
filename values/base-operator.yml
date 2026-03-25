@@ -1,0 +1,178 @@
+---
+resources:
+  limits:
+    cpu: null
+    memory: 384Mi
+  requests:
+    cpu: null
+    memory: 32Mi
+csi:
+  enableLiveness: true
+  csiRBDProvisionerResource: |-
+    - name : csi-provisioner
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 20m
+        limits:
+          memory: 128Mi
+    - name : csi-resizer
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-attacher
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-snapshotter
+      resource:
+        requests:
+          memory: 64Mi
+          cpu: 10m
+        limits:
+          memory: 128Mi
+    - name : liveness-prometheus
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-rbdplugin
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 128Mi
+  csiRBDPluginResource: |-
+    - name : csi-rbdplugin
+      resource:
+        requests:
+          memory: 64Mi
+          cpu: 20m
+        limits:
+          memory: 128Mi
+    - name : driver-registrar
+      resource:
+        requests:
+          memory: 16Mi
+          cpu: 10m
+        limits:
+          memory: 32Mi
+    - name : liveness-prometheus
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+  csiCephFSProvisionerResource: |-
+    - name : csi-provisioner
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 20m
+        limits:
+          memory: 128Mi
+    - name : csi-resizer
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-attacher
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-snapshotter
+      resource:
+        requests:
+          memory: 64Mi
+          cpu: 10m
+        limits:
+          memory: 128Mi
+    - name : liveness-prometheus
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+    - name : csi-cephfsplugin
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 128Mi
+  csiCephFSPluginResource: |-
+    - name : csi-cephfsplugin
+      resource:
+        requests:
+          memory: 64Mi
+          cpu: 20m
+        limits:
+          memory: 128Mi
+    - name : driver-registrar
+      resource:
+        requests:
+          memory: 16Mi
+          cpu: 10m
+        limits:
+          memory: 32Mi
+    - name : liveness-prometheus
+      resource:
+        requests:
+          memory: 32Mi
+          cpu: 10m
+        limits:
+          memory: 64Mi
+  pluginTolerations:
+    - key: CriticalOnly
+      operator: Exists
+    - key: InfrastructureOnly
+      operator: Exists
+tolerations:
+  - operator: "Exists"
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: CriticalOnly
+              operator: Exists
+discover:
+  tolerations:
+    - effect: NoSchedule
+      key: CriticalOnly
+      operator: Exists
+imagePullSecrets:
+  - name: private-registry
+ceph-csi-operator:
+  controllerManager:
+    podSecurityContext:
+      runAsNonRoot: true
+    # will work after this is merged and rook is updated
+    # https://github.com/ceph/ceph-csi-operator/pull/353
+    tolerations:
+      - operator: "Exists"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: CriticalOnly
+                  operator: Exists
+  imagePullSecrets:
+    - name: private-registry
