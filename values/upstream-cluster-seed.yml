@@ -1,8 +1,5 @@
 ---
-cephClusterSpec:
-  cephVersion:
-    # renovate-ceph
-    image: ###ZARF_REGISTRY###/ceph/ceph:v19.2.3
+cephImage:
+  repository: ###ZARF_REGISTRY###/ceph/ceph
 toolbox:
-  # renovate-ceph
-  image: ###ZARF_REGISTRY###/ceph/ceph:v19.2.3
+  image: ###ZARF_REGISTRY###/ceph/ceph:v20.2.2

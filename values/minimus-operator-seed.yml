@@ -1,0 +1,27 @@
+csi:
+  cephcsi:
+    repository: "###ZARF_REGISTRY###/cephcsi"
+  registrar:
+    repository: "###ZARF_REGISTRY###/kubernetes-csi-node-driver-registrar"
+  provisioner:
+    repository: "###ZARF_REGISTRY###/kubernetes-csi-provisioner"
+    tag: v6.3.0
+  snapshotter:
+    repository: "###ZARF_REGISTRY###/kubernetes-csi-external-snapshotter"
+    tag: v8.6.0
+  attacher:
+    repository: "###ZARF_REGISTRY###/kubernetes-csi-attacher"
+    tag: v4.12.0
+  resizer:
+    repository: "###ZARF_REGISTRY###/kubernetes-csi-external-resizer"
+    tag: v2.2.1
+  csiAddons:
+    repository: "###ZARF_REGISTRY###/k8s-sidecar"
+    tag: v2.8.1
+image:
+  repository: "###ZARF_REGISTRY###/rook-ceph"
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: "###ZARF_REGISTRY###/ceph-csi-operator"

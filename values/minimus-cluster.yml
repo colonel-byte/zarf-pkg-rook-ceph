@@ -1,0 +1,5 @@
+---
+cephImage:
+  repository: reg.mini.dev/ceph
+toolbox:
+  image: reg.mini.dev/ceph:v20.2.2

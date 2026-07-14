@@ -70,30 +70,5 @@
       ],
       depNameTemplate: "quay.io/ceph/ceph"
     },
-    {
-      customType: "regex",
-      description: [
-        "Process custom dependencies"
-      ],
-      managerFilePatterns: [
-        "/(^|/)\\.github/renovate.json(5)?$/"
-      ],
-      matchStrings: [
-        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.+?(?<currentValue>v?(?:[0-9]+\\.?){3}))"
-      ],
-      datasourceTemplate: "git-tags",
-      depNameTemplate: "https://github.com/rook/rook.git",
-      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
-    },
-  ],
-  customDatasources: {
-    ceph: {
-      // renovate: versioning=regex:^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$
-      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.18.6/deploy/charts/rook-ceph-cluster/values.yaml",
-      format: "yaml",
-      transformTemplates: [
-        "($pkg := cephClusterSpec.cephVersion.image; $vrs := $replace($pkg, /^q.+:/, ''); {\"releases\": [{\"version\": $vrs, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]})"
-      ]
-    }
-  }
+  ]
 }

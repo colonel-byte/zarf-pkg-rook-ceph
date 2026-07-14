@@ -11,10 +11,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:v1.18.6
+    - ghcr.io/rook/rook-ceph-cluster:v1.20.2
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:v1.18.6
+    - ghcr.io/rook/rook-ceph:v1.20.2
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
@@ -24,23 +24,23 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.18.6
-      - ghcr.io/rook/rook-ceph:v1.18.6
-      - quay.io/cephcsi/ceph-csi-operator:v0.4.1
-      - quay.io/cephcsi/cephcsi:v3.15.0
-      - quay.io/csiaddons/k8s-sidecar:v0.13.0
-      - registry.k8s.io/sig-storage/csi-attacher:v4.8.1
-      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0
-      - registry.k8s.io/sig-storage/csi-provisioner:v5.2.0
-      - registry.k8s.io/sig-storage/csi-resizer:v1.13.2
-      - registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1
+      - ghcr.io/rook/ceph:v1.20.2
+      - ghcr.io/rook/rook-ceph:v1.20.2
+      - quay.io/cephcsi/ceph-csi-operator:v1.0.4
+      - quay.io/cephcsi/cephcsi:v3.17.0
+      - quay.io/csiaddons/k8s-sidecar:v0.14.0
+      - registry.k8s.io/sig-storage/csi-attacher:v4.12.0
+      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
+      - registry.k8s.io/sig-storage/csi-provisioner:v6.2.0
+      - registry.k8s.io/sig-storage/csi-resizer:v2.1.0
+      - registry.k8s.io/sig-storage/csi-snapshotter:v8.5.0
   - name: cluster-images
     required: false
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.18.6
-      - quay.io/ceph/ceph:v19.2.3
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.2
+      - quay.io/ceph/ceph:v20.2.2
   - name: operator-seed-chart
     required: false
     only:
@@ -85,3 +85,69 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster.yml
+  - name: operator-images
+    required: false
+    only:
+      flavor: minimus
+    images:
+      - ghcr.io/rook/rook-ceph:v1.20.2
+      - reg.mini.dev/ceph-csi-operator:v1.0.4
+      - reg.mini.dev/cephcsi:v3.17.0
+      - reg.mini.dev/k8s-sidecar:v2.8.1
+      - reg.mini.dev/kubernetes-csi-attacher:v4.12.0
+      - reg.mini.dev/kubernetes-csi-external-resizer:v2.2.1
+      - reg.mini.dev/kubernetes-csi-external-snapshotter:v8.6.0
+      - reg.mini.dev/kubernetes-csi-node-driver-registrar:v2.17.0
+      - reg.mini.dev/kubernetes-csi-provisioner:v6.3.0
+      - reg.mini.dev/rook-ceph:v1.20.2
+  - name: cluster-images
+    required: false
+    only:
+      flavor: minimus
+    images:
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.2
+      - reg.mini.dev/ceph:v20.2.2
+  - name: operator-seed-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/minimus-operator-seed.yml
+  - name: cluster-seed-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/minimus-cluster-seed.yml
+  - name: operator-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/minimus-operator.yml
+  - name: cluster-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/minimus-cluster.yml
