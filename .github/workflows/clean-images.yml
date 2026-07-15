@@ -18,7 +18,7 @@ jobs:
         with:
           packages: "zarf/rook-ceph"
           use-regex: true
-          exclude-tags: "^v\\d+\\.\\d+\\.\\d+-(upstream|registry1)$"
+          exclude-tags: "^v\\d+\\.\\d+\\.\\d+-(upstream|minimus)$"
           token: '${{ secrets.GITHUB_TOKEN }}'
           keep-n-untagged: 0
           keep-n-tagged: 0
