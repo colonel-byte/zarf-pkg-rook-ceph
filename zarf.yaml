@@ -3,7 +3,7 @@
 kind: ZarfPackageConfig
 metadata:
   name: rook-ceph
-  version: "###ZARF_PKG_TMPL_VERSION###"
+  version: v1.20.2
   source: https://github.com/colonel-byte/zarf-pkg-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-pkg-rook-ceph"
