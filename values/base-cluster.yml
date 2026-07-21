@@ -115,9 +115,9 @@ cephClusterSpec:
         cpu: 50m
         memory: 256Mi
     osd:
-      limits: null
-      # cpu: null
-      # memory: 4Gi
+      limits:
+        cpu: null
+        memory: 4Gi
       requests:
         cpu: 10m
         memory: 128Mi

@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
 kind: ZarfPackageConfig
 metadata:
-  name: rook-ceph
+  name: csi-rook-ceph
   version: v1.20.2
   source: https://github.com/colonel-byte/zarf-pkg-rook-ceph
   annotations:
