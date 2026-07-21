@@ -2,8 +2,17 @@
 toolbox:
   enabled: true
   tolerations:
-    - operator: "Exists"
-  affinity: {}
+    - operator: Exists
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - preference:
+            matchExpressions:
+              - key: adrp.xyz/is-infra
+                operator: In
+                values:
+                  - "true"
+          weight: 100
   resources:
     limits:
       cpu: null
@@ -20,6 +29,14 @@ monitoring:
 pspEnable: false
 cephClusterSpec:
   dataDirHostPath: "###ZARF_VAR_ROOK_CEPH_DATA_DIR###"
+  dashboard:
+    enabled: true
+    ssl: false
+  storage:
+    useAllNodes: true
+    useAllDevices: true
+    config:
+      encryptedDevice: "true" # Enable encryption at rest
   mon:
     count: 3
     allowMultiplePerNode: false
@@ -29,9 +46,6 @@ cephClusterSpec:
     modules:
       - name: pg_autoscaler
         enabled: true
-  dashboard:
-    enabled: true
-    ssl: false
   placement:
     all:
       nodeAffinity:
@@ -149,9 +163,6 @@ cephClusterSpec:
     mon: system-node-critical
     osd: system-node-critical
     mgr: system-cluster-critical
-  storage:
-    useAllNodes: true
-    useAllDevices: true
 cephBlockPools:
   - name: ceph-blockpool
     spec:
