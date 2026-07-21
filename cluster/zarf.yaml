@@ -9,6 +9,7 @@ components:
       - name: rook-ceph-cluster
         namespace: rook-ceph
         releaseName: rook-ceph-cluster
+        noWait: true
         url: oci://ghcr.io/rook/rook-ceph-cluster
         # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
         version: v1.20.2
