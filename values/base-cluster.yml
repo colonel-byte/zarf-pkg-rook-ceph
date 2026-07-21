@@ -102,21 +102,21 @@ cephClusterSpec:
   resources:
     mgr:
       limits:
-        cpu: null
+        cpu: 1000m
         memory: 768Mi
       requests:
         cpu: 100m
         memory: 512Mi
     mon:
       limits:
-        cpu: null
+        cpu: 500m
         memory: 1024Mi
       requests:
         cpu: 50m
         memory: 256Mi
     osd:
       limits:
-        cpu: null
+        cpu: 1000m
         memory: 4Gi
       requests:
         cpu: 10m
@@ -139,21 +139,21 @@ cephClusterSpec:
         memory: 60Mi
     logcollector:
       limits:
-        cpu: null
+        cpu: 1000m
         memory: 128Mi
       requests:
         cpu: 10m
         memory: 100Mi
     cleanup:
       limits:
-        cpu: null
+        cpu: 1000m
         memory: 1Gi
       requests:
         cpu: 500m
         memory: 100Mi
     exporter:
       limits:
-        cpu: null
+        cpu: 1000m
         memory: 128Mi
       requests:
         cpu: 50m
@@ -204,7 +204,7 @@ cephFileSystems:
         activeStandby: true
         resources:
           limits:
-            cpu: null
+            cpu: 1000m
             memory: 128Mi
           requests:
             cpu: 10m
@@ -264,7 +264,7 @@ cephObjectStores:
         port: 80
         resources:
           limits:
-            cpu: null
+            cpu: 500m
             memory: 384Mi
           requests:
             cpu: 10m
