@@ -151,3 +151,21 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/minimus-cluster.yml
+  - name: registry-bucket
+    required: false
+    manifests:
+      - name: registry-bucket
+        namespace: zarf
+        files:
+          - manifests/obc-registry-bucket.yaml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: ObjectBucketClaim
+                name: registry-bucket
+                condition: "'{.status.phase}'=Bound"
+                namespace: zarf
+            maxTotalSeconds: 2700
+            description: Waiting for ceph bucket to be created and bound
