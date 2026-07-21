@@ -138,11 +138,17 @@ csi:
           cpu: 10m
         limits:
           memory: 64Mi
+  csiAddons:
+    enabled: false
   pluginTolerations:
     - key: CriticalOnly
       operator: Exists
     - key: InfrastructureOnly
       operator: Exists
+  provisionerTolerations:
+    - key: InfrastructureOnly
+      operator: Exists
+  provisionerNodeAffinity: adrp.xyz/is-infra=true
 tolerations:
   - operator: "Exists"
 affinity:
@@ -176,3 +182,14 @@ ceph-csi-operator:
                   operator: Exists
   imagePullSecrets:
     - name: private-registry
+hostpathRequiresPrivileged: true
+# might need this one too for selinux support
+enablePluginSelinuxHostMount: true
+nodeSelector:
+  adrp.xyz/is-infra: "true"
+admissionController:
+  tolerations:
+    - operator: "Exists"
+agent:
+  tolerations:
+    - operator: "Exists"
