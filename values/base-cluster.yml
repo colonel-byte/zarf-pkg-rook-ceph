@@ -24,7 +24,7 @@ storage:
   useAllNodes: true
   useAllDevices: true
 monitoring:
-  enabled: true
+  enabled: false
   createPrometheusRules: false
 pspEnable: false
 cephClusterSpec:
