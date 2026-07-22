@@ -197,7 +197,7 @@ cephFileSystems:
       dataPools:
         - failureDomain: host
           replicated:
-            size: 2
+            size: 3
           name: data0
       metadataServer:
         activeCount: 1
@@ -205,10 +205,10 @@ cephFileSystems:
         resources:
           limits:
             cpu: 1000m
-            memory: 128Mi
+            memory: "1Gi"
           requests:
-            cpu: 10m
-            memory: 32Mi
+            cpu: "250m"
+            memory: "1Gi"
         priorityClassName: system-cluster-critical
         placement:
           nodeAffinity:
@@ -239,13 +239,14 @@ cephFileSystems:
       reclaimPolicy: Delete
       allowVolumeExpansion: true
       volumeBindingMode: "Immediate"
+      mountOptions: []
       parameters:
         csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-        csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+        csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-        csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+        csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-        csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+        csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/fstype: ext4
 cephObjectStores:
   - name: ceph-objectstore

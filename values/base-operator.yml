@@ -141,10 +141,7 @@ csi:
   csiAddons:
     enabled: true
   pluginTolerations:
-    - key: CriticalOnly
-      operator: Exists
-    - key: InfrastructureOnly
-      operator: Exists
+    - operator: Exists
   provisionerTolerations:
     - key: InfrastructureOnly
       operator: Exists
