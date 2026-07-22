@@ -14,3 +14,22 @@ components:
         version: 1.0.4
         valuesFiles:
           - ../values/base-csi-driver.yml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: pod
+                name: app=rook-ceph.rbd.csi.ceph.com-nodeplugin
+                condition: Ready
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for rbd pods to be stable
+          - wait:
+              cluster:
+                kind: pod
+                name: app=rook-ceph.cephfs.csi.ceph.com-nodeplugin
+                condition: Ready
+                namespace: rook-ceph
+            maxTotalSeconds: 2700
+            description: Waiting for cephfs pods to be stable
