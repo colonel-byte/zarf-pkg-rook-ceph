@@ -52,11 +52,6 @@ components:
       - name: rook-ceph
         valuesFiles:
           - values/upstream-operator-seed.yml
-  - name: driver-chart
-    required: false
-    import:
-      path: ./driver
-      name: driver-chart
   - name: cluster-seed-chart
     required: false
     only:
@@ -90,6 +85,11 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster.yml
+  - name: driver-chart
+    required: false
+    import:
+      path: ./driver
+      name: driver-chart
   - name: operator-images
     required: false
     only:
