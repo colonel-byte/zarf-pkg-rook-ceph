@@ -1,0 +1,3 @@
+---
+toolbox:
+  image: quay.io/ceph/ceph:v20.2.2

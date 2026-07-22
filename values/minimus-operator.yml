@@ -1,0 +1,27 @@
+csi:
+  cephcsi:
+    repository: reg.mini.dev/cephcsi
+  registrar:
+    repository: reg.mini.dev/kubernetes-csi-node-driver-registrar
+  provisioner:
+    repository: reg.mini.dev/kubernetes-csi-provisioner
+    tag: v6.3.0
+  snapshotter:
+    repository: reg.mini.dev/kubernetes-csi-external-snapshotter
+    tag: v8.6.0
+  attacher:
+    repository: reg.mini.dev/kubernetes-csi-attacher
+    tag: v4.12.0
+  resizer:
+    repository: reg.mini.dev/kubernetes-csi-external-resizer
+    tag: v2.2.1
+  csiAddons:
+    repository: reg.mini.dev/k8s-sidecar
+    tag: v2.8.1
+image:
+  repository: reg.mini.dev/rook-ceph
+ceph-csi-operator:
+  controllerManager:
+    manager:
+      image:
+        repository: reg.mini.dev/ceph-csi-operator
