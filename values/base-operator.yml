@@ -21,7 +21,7 @@ csi:
   provisionerTolerations:
     - key: InfrastructureOnly
       operator: Exists
-  provisionerNodeAffinity: adrp.xyz/is-infra=true
+  provisionerNodeAffinity: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###=true"
 tolerations:
   - operator: "Exists"
 affinity:
@@ -59,7 +59,7 @@ hostpathRequiresPrivileged: true
 # might need this one too for selinux support
 enablePluginSelinuxHostMount: true
 nodeSelector:
-  adrp.xyz/is-infra: "true"
+  "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###": "true"
 admissionController:
   tolerations:
     - operator: "Exists"

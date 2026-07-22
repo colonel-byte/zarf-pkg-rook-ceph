@@ -8,7 +8,7 @@ toolbox:
       preferredDuringSchedulingIgnoredDuringExecution:
         - preference:
             matchExpressions:
-              - key: adrp.xyz/is-infra
+              - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                 operator: In
                 values:
                   - "true"
@@ -52,7 +52,7 @@ cephClusterSpec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: adrp.xyz/is-infra
+                - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                   operator: In
                   values:
                     - "true"
@@ -65,7 +65,7 @@ cephClusterSpec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: adrp.xyz/is-infra
+                - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                   operator: In
                   values:
                     - "true"
@@ -78,7 +78,7 @@ cephClusterSpec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: adrp.xyz/is-infra
+                - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                   operator: In
                   values:
                     - "true"
@@ -91,7 +91,7 @@ cephClusterSpec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: adrp.xyz/is-infra
+                - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                   operator: In
                   values:
                     - "true"
@@ -227,7 +227,7 @@ cephFileSystems:
             requiredDuringSchedulingIgnoredDuringExecution:
               nodeSelectorTerms:
                 - matchExpressions:
-                    - key: adrp.xyz/is-infra
+                    - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                       operator: In
                       values:
                         - "true"
@@ -288,7 +288,7 @@ cephObjectStores:
             requiredDuringSchedulingIgnoredDuringExecution:
               nodeSelectorTerms:
                 - matchExpressions:
-                    - key: adrp.xyz/is-infra
+                    - key: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###"
                       operator: In
                       values:
                         - "true"

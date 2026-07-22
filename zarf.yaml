@@ -18,8 +18,16 @@ x-charts:
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
+    description: |-
+      where the rook-ceph data lives
   - name: KUBELET_DATA_DIR
     default: /var/lib/kubelet
+    description: |-
+      where the kubelet directory lives
+  - name: NODE_INFRASTRUCTURE_LABEL
+    default: adrp.xyz/is-infra
+    description: |-
+      kubernets label that is used to indicate nodes that are used for infrastructure purposes
 components:
   - name: operator-images
     required: false
