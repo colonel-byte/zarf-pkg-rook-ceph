@@ -1,0 +1,140 @@
+---
+operatorConfig:
+  name: ceph-csi-operator-config
+  namespace: rook-ceph # namespace:operator
+  create: true
+  driverSpecDefaults:
+    imageSet:
+      name: rook-csi-operator-image-set-configmap
+    nodePlugin:
+      kubeletDirPath: "###ZARF_VAR_ROOK_CEPH_DATA_DIR###"
+      priorityClassName: system-node-critical
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+    controllerPlugin:
+      priorityClassName: system-cluster-critical
+      replicas: 2
+      tolerations:
+        - key: InfrastructureOnly
+          effect: NoSchedule
+          operator: Exists
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: adrp.xyz/app
+                      operator: In
+                      values:
+                        - ctrlplugin
+                topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      labels:
+        adrp.xyz/app: ctrlplugin
+
+drivers:
+  rbd:
+    enabled: true
+    name: rook-ceph.rbd.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
+  cephfs:
+    enabled: true
+    name: rook-ceph.cephfs.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
+  nfs:
+    enabled: false
+    name: rook-ceph.nfs.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
+  nvmeof:
+    enabled: false
+    name: rook-ceph.nvmeof.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
+
+imagePullSecrets:
+  - name: private-registry
