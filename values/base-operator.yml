@@ -139,7 +139,7 @@ csi:
         limits:
           memory: 64Mi
   csiAddons:
-    enabled: false
+    enabled: true
   pluginTolerations:
     - key: CriticalOnly
       operator: Exists
