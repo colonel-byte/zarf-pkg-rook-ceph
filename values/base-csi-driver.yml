@@ -7,7 +7,7 @@ operatorConfig:
     imageSet:
       name: rook-csi-operator-image-set-configmap
     nodePlugin:
-      kubeletDirPath: "###ZARF_VAR_ROOK_CEPH_DATA_DIR###"
+      kubeletDirPath: "###ZARF_VAR_KUBELET_DATA_DIR###"
       priorityClassName: system-node-critical
       tolerations:
         - key: InfrastructureOnly

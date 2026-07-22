@@ -18,6 +18,8 @@ x-charts:
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
+  - name: KUBELET_DATA_DIR
+    default: /var/lib/kubelet
 components:
   - name: operator-images
     required: false
