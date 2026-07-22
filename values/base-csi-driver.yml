@@ -58,15 +58,83 @@ drivers:
   rbd:
     enabled: true
     name: rook-ceph.rbd.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
   cephfs:
     enabled: true
     name: rook-ceph.cephfs.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
   nfs:
     enabled: false
     name: rook-ceph.nfs.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
   nvmeof:
     enabled: false
     name: rook-ceph.nvmeof.csi.ceph.com
+    nodePlugin:
+      tolerations:
+        - operator: Exists
+    controllerPlugin:
+      replicas: 2
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: adrp.xyz/is-infra
+                    operator: In
+                    values:
+                      - "true"
+              weight: 100
+      tolerations:
+        - operator: Exists
 
 imagePullSecrets:
   - name: private-registry
