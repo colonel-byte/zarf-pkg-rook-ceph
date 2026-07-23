@@ -8,5 +8,5 @@ spec:
   bucketName: registry-bucket
   storageClassName: ceph-bucket
   additionalConfig:
-    maxObjects: "100000"
-    maxSize: "72G"
+    maxObjects: "100000000"
+    maxSize: "###ZARF_VAR_ROOK_CEPH_S3_BUCKET_SIZE###"

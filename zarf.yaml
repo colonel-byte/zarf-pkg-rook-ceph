@@ -4,9 +4,9 @@ kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
   version: v1.20.2
-  source: https://github.com/colonel-byte/zarf-pkg-rook-ceph
+  source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
-    org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-pkg-rook-ceph"
+    org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
     org.opencontainers.image.description: Zarf package for deploying rook-ceph
 x-charts:
   cluster:
@@ -24,6 +24,10 @@ variables:
     default: /var/lib/kubelet
     description: |-
       where the kubelet directory lives
+  - name: ROOK_CEPH_S3_BUCKET_SIZE
+    default: 72G
+    description: |-
+      how much space the zarf bucket is allowed to take up
   - name: NODE_INFRASTRUCTURE_LABEL
     default: adrp.xyz/is-infra
     description: |-
@@ -95,11 +99,6 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster.yml
-  - name: driver-chart
-    required: false
-    import:
-      path: ./driver
-      name: driver-chart
   - name: operator-images
     required: false
     only:
